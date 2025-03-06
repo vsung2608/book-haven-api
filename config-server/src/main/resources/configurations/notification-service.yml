@@ -1,0 +1,61 @@
+server:
+  port: 8050
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://vsung2608:260804@localhost:27017/notification-service?authSource=admin
+  kafka:
+    consumer:
+      group-id: notificationId-v1
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: latest
+      properties:
+        spring.json.trusted.packages: "com.efashion.common.event"
+#      properties:
+#        schema:
+#          registry:
+#            url: http://localhost:8085
+#        spring:
+#          deserializer:
+#            key:
+#              delegate:
+#                class: org.apache.kafka.common.serialization.StringDeserializer
+#            value:
+#              delegate:
+#                class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+#        specific:
+#          avro:
+#            reader: true
+    template:
+      default-topic: notificationTopic
+
+application:
+  brevo:
+    api-key: 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
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  observations:
+    key-values:
+      application: order-service

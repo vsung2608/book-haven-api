@@ -1,0 +1,143 @@
+server:
+  port: 8222
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/efashion
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        ## Order Service Route
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/v1/orders/**, /api/v1/orders
+        ## Order Service Swagger Route
+        - id: order-service-swagger
+          uri: http://localhost:8060
+          predicates:
+            - Path=/aggregate/order-service/v3/api-docs
+          filters:
+            - SetPath=/api-docs
+        ## Product Service Route
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/v1/products/**, /api/v1/products
+        ## Product Service Swagger Route
+        - id: product-service-swagger
+          uri: http://localhost:8070
+          predicates:
+            - Path=/aggregate/product-service/v3/api-docs
+          filters:
+            - SetPath=/api-docs
+        ## Customer Service Route
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/api/v1/customers/**, /api/v1/customers
+        ## Customer Service Swagger Route
+        - id: customer-service-swagger
+          uri: http://localhost:8090
+          predicates:
+            - Path=/aggregate/customer-service/v3/api-docs
+          filters:
+            - SetPath=/api-docs
+#        ## Payment Service Route
+#        - id: product-service
+#          uri: lb://product-service
+#          predicates:
+#            - Path=/api/v1/**
+#        ## Product Service Swagger Route
+#        - id: product-service-swagger
+#          uri: http://localhost:8080
+#          predicates:
+#            - Path=/aggregate/product-service/v3/api/docs
+#          filters:
+#            - SetPath=/api/v1/api-docs
+        ## Discovery Server Route
+        - id: discovery-server
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/web
+          filters:
+            - SetPath=/
+        ## Discovery Server Route Static Source
+        - id: discovery-server-static
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/**
+
+springdoc:
+  swagger-ui:
+    enable: true
+    path: /swagger-ui.html
+    urls:
+      - name: Product Service
+        url: /aggregate/product-service/v3/api-docs
+      - name: Order Service
+        url: /aggregate/order-service/v3/api-docs
+      - name: Customer Service
+        url: /aggregate/customer-service/v3/api-docs
+#      - name: Payment Service
+#        url: /aggregate/payment-service/v3/api/docs
+  api-docs:
+    enable: true
+    path: /api-docs
+
+resilience4j:
+  ## Inventory CircuitBreaker Properties
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        event-consumer-buffer-size: 10
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+  ##  Inventory CircuitBreaker Timeout Properties
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 3s
+  ## Inventory CircuitBreaker Retry Properties
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration: 5s
+
+logging:
+  level:
+    root: INFO  # Mức log chung
+    org.springframework.web: DEBUG  # Log cho Spring Web (REST API)
+    org.springframework.cloud.gateway: DEBUG  # Log chi tiết cho Gateway
+    org.springframework.http.server: DEBUG  # Log request & response
+    org.springframework.security: DEBUG  # Log bảo mật (nếu dùng Spring Security)
+    org.apache.kafka: DEBUG  # Log Kafka (nếu dùng Kafka)
+    com.rabbitmq: DEBUG  # Log RabbitMQ (nếu dùng RabbitMQ)

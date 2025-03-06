@@ -1,0 +1,147 @@
+services:
+  postgrest:
+    image: postgres
+    container_name: ms_postgres
+    environment:
+      POSTGRES_USER: vsung2608
+      POSTGRES_PASSWORD: 260804
+      PGDATA: /var/lib/postgres/data
+    volumes:
+      - postgres:/var/lib/postgressql/data
+    ports:
+      - 5432:5432
+    networks:
+      microservices-net:
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo
+    container_name: ms_mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: vsung2608
+      MONGO_INITDB_ROOT_PASSWORD: 260804
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.4
+    container_name: ms_zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - '22181:2181'
+    networks:
+      - microservices-net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.4
+    container_name: ms_kafka
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    ports:
+      - '9092:9092'
+      - '29092:29092'
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - microservices-net
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1.2
+    container_name: ms_keycloak
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command: "start-dev"
+    networks:
+      - microservices-net
+#
+#  scheme-registry:
+#    image: confluentinc/cp-schema-registry:latest
+#    container_name: scheme-registry
+#    restart: unless-stopped
+#    ports:
+#      - '8085:8081'
+#    depends_on:
+#      - kafka
+#    environment:
+#      SCHEMA_REGISTRY_HOST_NAME: scheme-registry
+#      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVER: 'kafka:29092'
+#      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'localhost:2181'
+#      SCHEMA_REGISTRY_LISTENERS: http://scheme-registry:8081
+#
+#
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ms_prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker-command/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - --enable-feature=exemplar-storage
+      - --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      - microservices-net
+
+  loki:
+    image: grafana/loki:main
+    container_name: ms_loki
+    restart: unless-stopped
+    command: [ '-config.file=/etc/loki/local-config.yaml' ]
+    ports:
+      - '3100:3100'
+    networks:
+      - microservices-net
+
+  tempo:
+    image: grafana/tempo:latest
+    container_name: ms_tempo
+    restart: unless-stopped
+    command: ['-config.file=/etc/tempo.yml']
+    volumes:
+      - ./docker-command/tempo/tempo.yml:/etc/tempo.yml:ro
+      - ./docker-command/tempo/tempo-data:/tmp/tempo
+    ports:
+      - '3200:3200' #Tempo
+      - '9411:9411' #Zipkin
+    networks:
+      - microservices-net
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: ms_grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    links:
+      - prometheus:prometheus
+    volumes:
+      - ./docker-command/grafana:/etc/grafana/provisioning/datasources:ro
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    networks:
+      - microservices-net
+
+networks:
+  microservices-net:
+    driver: bridge
+
+volumes:
+  postgres:
+  mongo:

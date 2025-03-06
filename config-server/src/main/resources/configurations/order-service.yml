@@ -1,0 +1,102 @@
+server:
+  port: 8060
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/order
+    username: vsung2608
+    password: 260804
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      bootstrap-servers: localhost:9092
+    template:
+      default-topic: notificationTopic
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+application:
+  config:
+    customer-url: http://localhost:8090/api/v1/customers
+    product-url: http://localhost:8070/api/v1/products
+    payment-url: http://localhost:8222/api/v1/payments
+
+logging:
+  level:
+    root: INFO  # Mức log chung
+    org.springframework.web: DEBUG  # Log cho Spring Web (REST API)
+    org.springframework.cloud.gateway: DEBUG  # Log chi tiết cho Gateway
+    org.springframework.http.server: DEBUG  # Log request & response
+    org.springframework.security: DEBUG  # Log bảo mật (nếu dùng Spring Security)
+    org.apache.kafka: DEBUG  # Log Kafka (nếu dùng Kafka)
+    com.rabbitmq: DEBUG  # Log RabbitMQ (nếu dùng RabbitMQ)
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  observations:
+    key-values:
+      application: order-service
+
+#resilience4j:
+#  ## Inventory CircuitBreaker Properties
+#  circuitbreaker:
+#    instances:
+#      inventory:
+#        register-health-indicator: true
+#        event-consumer-buffer-size: 10
+#        sliding-window-type: COUNT_BASED
+#        sliding-window-size: 5
+#        failure-rate-threshold: 50
+#        wait-duration-in-open-state: 5s
+#        permitted-number-of-calls-in-half-open-state: 3
+#        automatic-transition-from-open-to-half-open-enabled: true
+#  ##  Inventory CircuitBreaker Timeout Properties
+#  timelimiter:
+#    instances:
+#      inventory:
+#        timeout-duration: 3s
+#  ## Inventory CircuitBreaker Retry Properties
+#  retry:
+#    instances:
+#      inventory:
+#        max-attempts: 3
+#        wait-duration: 5s
+#
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs

@@ -1,0 +1,70 @@
+server:
+  port: 8070
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/product
+    username: vsung2608
+    password: 260804
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    baseline-description: 'init'
+    baseline-version: 0
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+logging:
+  level:
+    root: INFO  # Mức log chung
+    org.springframework.web: DEBUG  # Log cho Spring Web (REST API)
+    org.springframework.cloud.gateway: DEBUG  # Log chi tiết cho Gateway
+    org.springframework.http.server: DEBUG  # Log request & response
+    org.springframework.security: DEBUG  # Log bảo mật (nếu dùng Spring Security)
+    org.apache.kafka: DEBUG  # Log Kafka (nếu dùng Kafka)
+    com.rabbitmq: DEBUG  # Log RabbitMQ (nếu dùng RabbitMQ)
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  observations:
+    key-values:
+      application: order-service

@@ -1,0 +1,19 @@
+package com.efashion.order_service.mapper;
+
+import com.efashion.order_service.dto.request.OrderLineRequest;
+import com.efashion.order_service.entity.OrderLine;
+import com.efashion.order_service.entity.Orders;
+import org.springframework.stereotype.Service;
+
+@Service
+public class OrderLineMapper {
+    public OrderLine toOrderLine(OrderLineRequest request) {
+        return OrderLine.builder()
+                .order(Orders.builder()
+                        .id(request.orderId())
+                        .build())
+                .quantity(request.quantity())
+                .proCode(request.proCode())
+                .build();
+    }
+}
