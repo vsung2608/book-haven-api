@@ -13,7 +13,7 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       auto-offset-reset: latest
       properties:
-        spring.json.trusted.packages: "com.efashion.common.event"
+        spring.json.trusted.packages: "com.bookhaven.common.event"
 #      properties:
 #        schema:
 #          registry:

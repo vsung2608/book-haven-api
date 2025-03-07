@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "OrderPlacedEvent",
-  "namespace": "com.efashion.notification_service.event",
+  "namespace": "com.bookhaven.notification_service.event",
   "fields": [
     { "name":  "orderNumber", "type":  "string"},
     { "name":  "email", "type":  "string"},
