@@ -65,6 +65,11 @@ spring:
             - Path=/aggregate/customer-service/v3/api-docs
           filters:
             - SetPath=/api-docs
+        ## Auth Service Route
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/v1/auth/**
 #        ## Payment Service Route
 #        - id: product-service
 #          uri: lb://product-service

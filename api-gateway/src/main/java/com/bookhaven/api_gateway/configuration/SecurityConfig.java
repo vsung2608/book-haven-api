@@ -17,6 +17,7 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(auth -> auth
                         .pathMatchers(
+                                "/api/v1/auth/*",
                                 "/eureka/**",
                                 "/api-docs/**",
                                 "/v3/api-docs/**",
@@ -34,7 +35,6 @@ public class SecurityConfig {
                         .authenticated()
                 )
                 .oauth2ResourceServer(oAuth -> oAuth.jwt(Customizer.withDefaults()));
-
         return http.build();
     }
 }

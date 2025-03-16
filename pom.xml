@@ -23,6 +23,7 @@
         <module>customer-service</module>
         <module>payment-service</module>
         <module>common-event</module>
+        <module>auth-service</module>
     </modules>
 
     <!-- mvn spring-boot:build-image -DskipTests -DdockerPassword=? -->

@@ -1,0 +1,38 @@
+server:
+  port: 8030
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+application:
+  keycloak:
+    domain: http://localhost:8080
+    token-path: /realms/book-haven/protocol/openid-connect/token
+    user-path: /admin/realms/book-haven/users
+    client-id: book-haven-api-client
+    login-grant-type: password
+    refresh-grant-type: refresh_token
+    admin:
+      grant_type: client_credentials
+      client-id: book-haven-admin
+      client-secret: z1aSnAKaqOVcuPexhxk7c7aa0bfqaYmn
+
+logging:
+  level:
+    root: INFO  # Mức log chung
+    org.springframework.web: DEBUG  # Log cho Spring Web (REST API)
+    org.springframework.cloud.gateway: DEBUG  # Log chi tiết cho Gateway
+    org.springframework.http.server: DEBUG  # Log request & response
+    org.springframework.security: DEBUG  # Log bảo mật (nếu dùng Spring Security)
+    org.apache.kafka: DEBUG  # Log Kafka (nếu dùng Kafka)
+    com.rabbitmq: DEBUG  # Log RabbitMQ (nếu dùng RabbitMQ)

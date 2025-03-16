@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -23,6 +24,11 @@ public class Product {
     private String description;
     private BigDecimal price;
     private Integer quantity;
+    private String language;
+    private LocalDate publishDate;
+    private String author;
+    private String publisher;
+    private String image;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
