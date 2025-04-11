@@ -23,9 +23,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    @CircuitBreaker(name="inventory", fallbackMethod = "fallBackPlaceOrder")
-    @TimeLimiter(name="inventory")
-    @Retry(name="inventory")
+//    @CircuitBreaker(name="inventory", fallbackMethod = "fallBackPlaceOrder")
     public CompletableFuture<ResponseEntity<OrderResponse>> placeOrder(@RequestBody OrderRequest orderRequest) {
         return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(orderService.placeOrder(orderRequest)));
     }

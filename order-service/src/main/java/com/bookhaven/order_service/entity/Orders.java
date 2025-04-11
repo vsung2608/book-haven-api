@@ -28,7 +28,14 @@ public class Orders {
     private BigDecimal totalPrice;
     private String customerId;
     @Enumerated(EnumType.STRING)
+    private Status status;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
+    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
+    private BigDecimal shippingFee;
+    private String note;
+    private String shippingAddress;
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdDate;

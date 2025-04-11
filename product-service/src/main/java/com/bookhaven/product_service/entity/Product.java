@@ -16,9 +16,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Validated
+@SequenceGenerator(
+        name = "product_seq",
+        sequenceName = "product_seq",
+        allocationSize = 1
+)
 public class Product {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
     private int id;
     private String name;
     private String description;
@@ -29,6 +34,8 @@ public class Product {
     private String author;
     private String publisher;
     private String image;
+    private Integer evaluate;
+    private Integer discount;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

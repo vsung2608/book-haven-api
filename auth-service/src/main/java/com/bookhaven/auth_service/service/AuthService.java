@@ -34,7 +34,8 @@ public class AuthService {
 
         return new LoginResponse(
                 token.access_token(),
-                token.refresh_token()
+                token.refresh_token(),
+                token.expires_in()
         );
     }
 
@@ -65,7 +66,8 @@ public class AuthService {
                 .build());
         return new RefreshTokenResponse(
                 token.access_token(),
-                token.refresh_token()
+                token.refresh_token(),
+                token.expires_in()
         );
     }
 }

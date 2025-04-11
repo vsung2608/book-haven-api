@@ -7,6 +7,6 @@ public record PageResponse(
         int totalPages,
         int pageSize,
         long totalElements,
-        List<ProductResponse> data
+        List<ProductLimitedFieldsResponse> data
 ) {
 }

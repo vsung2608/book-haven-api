@@ -4,7 +4,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://vsung2608:260804@localhost:27017/product-service?authSource=admin
+      uri: mongodb://vsung2608:260804@localhost:27017/customer-service?authSource=admin
 
 springdoc:
   swagger-ui:

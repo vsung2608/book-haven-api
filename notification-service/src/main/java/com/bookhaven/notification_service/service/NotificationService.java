@@ -45,7 +45,7 @@ public class NotificationService {
                 .build();
 
         notificationRepository.save(Notification.builder()
-                        .type(NotificationType.ORDER_CONFIRMATION)
+                        .type(NotificationType.EMAIL)
                         .notificationDate(LocalDateTime.now())
                 .build());
         return emailClient.send(apiKey, request);
@@ -66,7 +66,7 @@ public class NotificationService {
                 .build();
 
         notificationRepository.save(Notification.builder()
-                .type(NotificationType.PAYMENT_CONFIRMATION)
+                .type(NotificationType.EMAIL)
                 .notificationDate(LocalDateTime.now())
                 .build());
         return emailClient.send(apiKey, request);

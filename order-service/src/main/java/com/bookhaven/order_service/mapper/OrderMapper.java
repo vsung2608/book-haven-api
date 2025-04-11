@@ -14,6 +14,11 @@ public class OrderMapper {
                 .paymentMethod(request.paymentMethod())
                 .reference(request.reference())
                 .totalPrice(request.totalPrice())
+                .note(request.note())
+                .status(request.status())
+                .paymentStatus(request.paymentStatus())
+                .shippingFee(request.shippingFee())
+                .shippingAddress(request.shippingAddress())
                 .build();
     }
 

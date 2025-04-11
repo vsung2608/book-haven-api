@@ -9,12 +9,13 @@ import com.bookhaven.product_service.mapper.ProductMapper;
 import com.bookhaven.product_service.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,20 +41,20 @@ public class ProductService {
 
     public PageResponse getAllProducts(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        var products = productRepository.findAll(pageable);
+        var products = productRepository.findAllProducts(pageable);
         return new PageResponse(
                 page,
                 products.getTotalPages(),
                 products.getSize(),
                 products.getTotalElements(),
-                products.getContent().stream().map(productMapper::toProductResponse).toList()
+                products.getContent()
         );
     }
 
     public ProductResponse findById(int id) {
         return productRepository.findById(id)
                 .map(productMapper::toProductResponse)
-                .orElseThrow(() -> new EntityNotFoundException("Product bot found with the ID:: %d".formatted(id)));
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with the ID:: %d".formatted(id)));
     }
 
     public List<PurchaseResponse> purchaseProducts(List<PurchaseRequest> request) {
@@ -81,49 +82,49 @@ public class ProductService {
 
     public PageResponse getLatestProduct(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        var products = productRepository.findAllOrderByPublishDateDesc(pageable);
+        var products = productRepository.findAllByOrderByPublishDateDesc(pageable);
         return new PageResponse(
                 page,
                 products.getTotalPages(),
                 products.getSize(),
                 products.getTotalElements(),
-                products.getContent().stream().map(productMapper::toProductResponse).toList()
+                products.getContent()
         );
     }
 
     public PageResponse getBestSellerProducts(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        var products = productRepository.findAllOrderByPublishDateDesc(pageable);
+        var products = productRepository.findAllByOrderByPublishDateDesc(pageable);
         return new PageResponse(
                 page,
                 products.getTotalPages(),
                 products.getSize(),
                 products.getTotalElements(),
-                products.getContent().stream().map(productMapper::toProductResponse).toList()
+                products.getContent()
         );
     }
 
     public PageResponse getProductsByPriceAsc(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        var products = productRepository.findAllOrderByPriceAsc(pageable);
+        var products = productRepository.findAllByOrderByPriceAsc(pageable);
         return new PageResponse(
                 page,
                 products.getTotalPages(),
                 products.getSize(),
                 products.getTotalElements(),
-                products.getContent().stream().map(productMapper::toProductResponse).toList()
+                products.getContent()
         );
     }
 
     public PageResponse getProductsByPriceDesc(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        var products = productRepository.findAllOrderByPriceDesc(pageable);
+        var products = productRepository.findAllByOrderByPriceDesc(pageable);
         return new PageResponse(
                 page,
                 products.getTotalPages(),
                 products.getSize(),
                 products.getTotalElements(),
-                products.getContent().stream().map(productMapper::toProductResponse).toList()
+                products.getContent()
         );
     }
 }
