@@ -4,7 +4,6 @@ import com.bookhaven.auth_service.dto.request.LoginRequest;
 import com.bookhaven.auth_service.dto.request.RegisterRequest;
 import com.bookhaven.auth_service.dto.response.LoginResponse;
 import com.bookhaven.auth_service.dto.response.RefreshTokenResponse;
-import com.bookhaven.auth_service.dto.response.TokenResponse;
 import com.bookhaven.auth_service.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

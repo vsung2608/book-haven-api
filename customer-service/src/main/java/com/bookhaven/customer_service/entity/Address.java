@@ -12,6 +12,8 @@ import org.springframework.validation.annotation.Validated;
 @NoArgsConstructor
 @Validated
 public class Address {
+    private String country;
+    private String code;
     private String city;
     private String distic;
     private String village;

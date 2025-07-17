@@ -1,5 +1,6 @@
 package com.bookhaven.product_service.dto.response;
 
+
 import java.math.BigDecimal;
 
 public record ProductLimitedFieldsResponse(
@@ -8,6 +9,8 @@ public record ProductLimitedFieldsResponse(
         Integer discount,
         Integer evaluate,
         String image,
-        BigDecimal price
+        BigDecimal price,
+        String categoryName,
+        Integer quantity
 ) {
 }

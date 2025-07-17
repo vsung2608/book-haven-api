@@ -45,26 +45,32 @@ logging:
     org.apache.kafka: DEBUG  # Log Kafka (nếu dùng Kafka)
     com.rabbitmq: DEBUG  # Log RabbitMQ (nếu dùng RabbitMQ)
 
-management:
-  tracing:
-    sampling:
-      probability: 1.0
-  health:
-    circuitbreakers:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: health, info, metrics, prometheus
-  endpoint:
-    health:
-      show-details: always
-  metrics:
-    distribution:
-      percentiles-histogram:
-        http:
-          server:
-            requests: true
-  observations:
-    key-values:
-      application: order-service
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#  health:
+#    circuitbreakers:
+#      enabled: true
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health, info, metrics, prometheus
+#  endpoint:
+#    health:
+#      show-details: always
+#  metrics:
+#    distribution:
+#      percentiles-histogram:
+#        http:
+#          server:
+#            requests: true
+#  observations:
+#    key-values:
+#      application: order-service
+
+application:
+  cloudinary:
+    cloud-name: ${CLOUD-NAME}
+    api-key: ${API-KEY}
+    api-secret: ${API-SECRET}

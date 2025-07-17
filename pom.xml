@@ -25,6 +25,7 @@
         <module>common-event</module>
         <module>auth-service</module>
         <module>cart-service</module>
+        <module>interaction-service</module>
     </modules>
 
     <!-- mvn spring-boot:build-image -DskipTests -DdockerPassword=? -->

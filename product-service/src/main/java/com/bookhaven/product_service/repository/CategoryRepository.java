@@ -1,2 +1,9 @@
-package com.bookhaven.product_service.repository;public interface CategoryRepository {
+package com.bookhaven.product_service.repository;
+
+import com.bookhaven.product_service.entity.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
 }

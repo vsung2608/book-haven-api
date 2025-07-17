@@ -10,6 +10,7 @@ import com.bookhaven.common.dto.PurchaseResponse;
 import com.bookhaven.order_service.exception.BusinessException;
 import com.bookhaven.order_service.mapper.OrderMapper;
 import com.bookhaven.order_service.repository.OrderRepository;
+import com.bookhaven.order_service.repository.web_client.CartClient;
 import com.bookhaven.order_service.repository.web_client.CustomerClient;
 import com.bookhaven.order_service.repository.web_client.ProductClient;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class OrderService {
     private final OrderLineService orderLineService;
     private final ProductClient productClient;
     private final CustomerClient customerClient;
+    private final CartClient cartClient;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public OrderResponse placeOrder(OrderRequest orderRequest) {
@@ -61,6 +63,7 @@ public class OrderService {
                     order.getTotalPrice()
             );
             kafkaTemplate.send("orderTopics", event);
+            cartClient.deleteItemsInCart(orderRequest.customerId());
 
             return orderMapper.toOrderResponse(order);
         }else{

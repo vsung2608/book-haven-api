@@ -59,3 +59,7 @@ management:
   observations:
     key-values:
       application: order-service
+
+application:
+  sepay:
+    token: BRJO2ID4Z7XTV8DLXVL8RFO61IAACK9YE5QCYWXGVVHJZA2OGPPYMHDLMUOBTRSU

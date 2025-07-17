@@ -2,6 +2,7 @@ package com.bookhaven.product_service.dto.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public record ProductResponse (
         Integer id,
@@ -14,8 +15,9 @@ public record ProductResponse (
         LocalDate publishDate,
         String author,
         String publisher,
-        String image,
+        List<String> image,
         CategoryResponse category,
         Integer evaluate,
-        Integer discount
+        Integer discount,
+        List<ProductLimitedFieldsResponse> relatedProducts
 ){ }

@@ -8,25 +8,27 @@ import com.bookhaven.product_service.entity.Product;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @Service
 public class ProductMapper {
     public Product toProduct(ProductRequest request){
         return Product.builder()
-                .name(request.name())
-                .price(request.price())
-                .description(request.description())
+                .name(request.getName())
+                .price(request.getPrice())
+                .description(request.getDescription())
                 .category(Category.builder()
-                        .id(request.categoryId())
+                        .id(request.getCategoryId())
                         .build())
-                .quantity(request.qunaity())
-                .language(request.language())
-                .publishDate(request.publishDate())
-                .author(request.author())
-                .publisher(request.publisher())
-                .image(request.image())
-                .evaluate(request.evaluate())
-                .discount(request.discount())
+                .quantity(request.getQuantity())
+                .language(request.getLanguage())
+                .publishDate(request.getPublishDate())
+                .author(request.getAuthor())
+                .publisher(request.getPublisher())
+                .image(null)
+                .evaluate(request.getEvaluate())
+                .discount(request.getDiscount())
                 .build();
     }
 
@@ -42,10 +44,11 @@ public class ProductMapper {
                 product.getPublishDate(),
                 product.getAuthor(),
                 product.getPublisher(),
-                product.getImage(),
+                Arrays.asList(product.getImage().split("\\|")),
                 new CategoryResponse(product.getCategory().getId(), product.getCategory().getName(), product.getCategory().getDescription()),
                 product.getEvaluate(),
-                product.getDiscount()
+                product.getDiscount(),
+                new ArrayList<>()
         );
     }
 }

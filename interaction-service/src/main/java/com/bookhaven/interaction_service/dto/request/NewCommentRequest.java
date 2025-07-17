@@ -1,8 +1,11 @@
 package com.bookhaven.interaction_service.dto.request;
 
-public record CommentRequest (
+public record NewCommentRequest(
         int productId,
         String userId,
-        String content
+        String content,
+        String userName,
+        String userAvatarUrl,
+        String parentCommentId
 ){
 }

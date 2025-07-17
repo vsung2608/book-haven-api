@@ -35,6 +35,7 @@ application:
     customer-url: http://localhost:8090/api/v1/customers
     product-url: http://localhost:8070/api/v1/products
     payment-url: http://localhost:8222/api/v1/payments
+    cart-url: http://localhost:8020/api/v1/carts
 
 logging:
   level:

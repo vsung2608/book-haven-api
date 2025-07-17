@@ -7,8 +7,10 @@ import com.bookhaven.product_service.dto.response.PageResponse;
 import com.bookhaven.product_service.dto.response.ProductResponse;
 import com.bookhaven.product_service.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,9 +20,12 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    @PostMapping
-    public ResponseEntity<ProductResponse> addProduct(@RequestBody ProductRequest request) {
-        return ResponseEntity.ok(productService.addProduct(request));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProductResponse> addProduct(
+            @RequestPart("product") ProductRequest request,
+            @RequestPart("images") List<MultipartFile> images
+    ) {
+        return ResponseEntity.ok(productService.addProduct(request, images));
     }
 
     @PutMapping("/{id}")
